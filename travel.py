@@ -24,13 +24,8 @@ def get_image_metadata(image_path):
 
     return lat, lon, dtime
 
-image_path = 'KakaoTalk_20240806_151540574.jpg'
+script_dir = os.path.dirname(os.path.abspath(__file__))
+image_path = os.path.join(script_dir, 'KakaoTalk_20240806_151540574.jpg')
+#image_path = 'KakaoTalk_20240806_151540574.jpg'
 metadata = get_image_metadata(image_path)
 print(metadata)
-
-
-        
-        
-
-
-

@@ -58,7 +58,7 @@ image_path = '/content/KakaoTalk_20240806_164948730.jpg'
 metadata = get_image_metadata(image_path)
 print(metadata) # 자료형 확인해서 프롬프트 엔지니어링 필요
 
-#얘는 그냥 깔끔용
+#얘는 그냥 깔끔용.
 if metadata:
     location, datetime_str = metadata
     if location:

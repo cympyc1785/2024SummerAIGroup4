@@ -9,3 +9,22 @@
 송유찬
 
 안동현
+
+## Environment
+
+python=3.12.4
+
+## Setup
+
+### .env
+
+```
+# .env
+API_KEY='API키'
+```
+
+### packages
+
+```
+$ pip install -r requriements.txt
+```

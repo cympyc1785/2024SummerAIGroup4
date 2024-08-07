@@ -38,7 +38,7 @@ with tab1:
         image = st.file_uploader("사진 첨부", type = ['png','jpeg','jpg'])
         description = st.text_input("사진에 대한 설명을 넣어주세요.")
         
-        if image is not None :
+        if image is not None and description is not None:
             st.image(image)
 
             # Save Image Temporarily
@@ -51,7 +51,7 @@ with tab1:
 
             print(caption)
 
-            recommendation = pkr.get_recommendation(caption)
+            recommendation = pkr.get_recommendation(caption, description)
 
             print(recommendation)
 
@@ -63,6 +63,8 @@ with tab1:
 
             with col2:
                 st.title('당신을 위해 추천된 플레이리스트')
+                for i in range(len(recommendation)):
+                    st.text(recommendation[i][0])
                 st.subheader('당신의 취향에 맞는 노래들로 채워보세요.')
             
             if st.button('음악 채우기'):

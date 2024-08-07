@@ -1,6 +1,9 @@
 
 from openai import OpenAI
 import streamlit as st
+from prompt import photo_keyword_request as pkr
+import os
+import tempfile
 
 
 if 'playlist_generated' not in st.session_state:
@@ -38,21 +41,35 @@ with tab1:
         if image is not None :
             st.image(image)
 
-        col1, col2 = st.columns([1,1])
+            # Save Image Temporarily
+            temp_dir = tempfile.mkdtemp()
+            img_path = os.path.join(temp_dir, image.name)
+            with open(img_path, "wb") as f:
+                    f.write(image.getvalue())
 
-        with col1:
-            st.title('당신만의 플레이리스트')
-            st.subheader('이 세상 하나뿐인 플레이리스트와 함께 여행해보세요 🎶')
+            caption = pkr.get_image_caption(img_path)
 
-        with col2:
-            st.title('당신을 위해 추천된 플레이리스트')
-            st.subheader('당신의 취향에 맞는 노래들로 채워보세요.')
-        
-        if st.button('음악 채우기'):
-            st.session_state.music_filled = True
-        
-        if st.session_state.music_filled:
-            st.success('음악이 당신의 플레이리스트에 채워졌습니다!')
+            print(caption)
+
+            recommendation = pkr.get_recommendation(caption)
+
+            print(recommendation)
+
+            col1, col2 = st.columns([1,1])
+
+            with col1:
+                st.title('당신만의 플레이리스트')
+                st.subheader('이 세상 하나뿐인 플레이리스트와 함께 여행해보세요 🎶')
+
+            with col2:
+                st.title('당신을 위해 추천된 플레이리스트')
+                st.subheader('당신의 취향에 맞는 노래들로 채워보세요.')
+            
+            if st.button('음악 채우기'):
+                st.session_state.music_filled = True
+            
+            if st.session_state.music_filled:
+                st.success('음악이 당신의 플레이리스트에 채워졌습니다!')
 
 with tab2:
     st.title('TripTunes')

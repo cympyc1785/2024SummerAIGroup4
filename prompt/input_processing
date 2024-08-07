@@ -1,0 +1,7 @@
+* photo
+
+	Extract keywordsthat best captures the atmosphere of the scenery in the picture.
+
+* query 
+
+	<keyword> >> Using these as the context, recommend me some musics. Try providing results from various domains, movie osts, K-pop ... etc. Be creative. 

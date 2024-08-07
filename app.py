@@ -4,7 +4,10 @@ import streamlit as st
 from prompt import photo_keyword_request as pkr
 import os
 import tempfile
+import webbrowser
 
+def goto_link(site_url):
+    webbrowser.open(site_url)
 
 if 'playlist_generated' not in st.session_state:
     st.session_state.playlist_generated = False
@@ -64,7 +67,7 @@ with tab1:
             with col2:
                 st.title('당신을 위해 추천된 플레이리스트')
                 for i in range(len(recommendation)):
-                    st.text(recommendation[i][0])
+                    st.link_button(recommendation[i][0], use_container_width=True, url="https://open.spotify.com/search/" + recommendation[i][0].strip())
                 st.subheader('당신의 취향에 맞는 노래들로 채워보세요.')
             
             if st.button('음악 채우기'):

@@ -1,6 +1,9 @@
 
 from openai import OpenAI
 import streamlit as st
+from prompt import photo_keyword_request as pkr
+import os
+import tempfile
 
 st.title('Triptunes')
 
@@ -37,6 +40,23 @@ with tab4:
 
         if image is not None :
             st.image(image)
+
+            # Save Image Temporarily
+            temp_dir = tempfile.mkdtemp()
+            img_path = os.path.join(temp_dir, image.name)
+            with open(img_path, "wb") as f:
+                    f.write(image.getvalue())
+
+            caption = pkr.get_image_caption(img_path)
+
+            print(caption)
+
+            recommendation = pkr.get_recommendation(caption)
+
+            # rec_list = recommendation.split(", ")
+
+            print(recommendation)
+
 
     
 

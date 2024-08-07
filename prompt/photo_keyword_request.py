@@ -5,11 +5,13 @@ from dotenv import load_dotenv
 from pathlib import Path
 from PIL import Image
 from io import BytesIO
+from openai import OpenAI
 
-env_path = Path('..')/'.env'
-load_dotenv(dotenv_path=env_path)
-api_key = os.getenv("API_KEY")
-image_path = "./sample.png"
+def get_api_key():
+    env_path = '.env'
+    load_dotenv(dotenv_path=env_path)
+    api_key = os.environ.get('API_KEY')
+    return api_key
 
 def encode_image(image_path):
     with Image.open(image_path) as image_file:
@@ -26,37 +28,92 @@ def encode_image(image_path):
         image_file.save(buffered, format="PNG")
         return base64.b64encode(buffered.getvalue()).decode('utf-8')
 
-base64_image = encode_image(image_path)
+def get_image_caption(image_path):
+    api_key = get_api_key()
 
-headers = {
-    "Content-Type": "application/json",
-    "Authorization": f"Bearer {api_key}"
-}
+    base64_image = encode_image(image_path)
 
-payload = {
-    "model": "gpt-4o-mini",
-    "messages": [
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "text",
-                    "text": "Extract keywordsthat best captures the atmosphere of the scenery in the picture."
-                },
-                {
-                    "type": "image_url",
-                    "image_url": {
-                        "url": f"data:image/jpeg;base64, {base64_image}"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
+
+    payload = {
+        "model": "gpt-4o-mini",
+        "messages": [
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": """Extract 10 keywords that best captures the atmosphere of the scenery in the picture.
+                                Your answer should only include keywords like
+                                Modern, Functional, Sleek, Minimalist, ...
+                                with only comma and no period.
+                                """
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": f"data:image/jpeg;base64, {base64_image}"
+                        }
+
                     }
+                ]
+            }
+        ],
+        "max_tokens": 300
+    }
 
-                }
-            ]
-        }
-    ],
-    "max_tokens": 300
-}
+    response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
 
-response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
+    return response.json()['choices'][0]['message']['content']
+    #print(response.json())
 
-print(response.json())
-#print(response.json())
+def get_recommendation(caption):
+    # tools = [
+    #     {
+    #         "type": "function",
+    #         "function": {
+    #             "name": "response_parsing",
+    #             "description": "parse music recommendations into list of [title, singer, list(genre)]",
+    #             "parameters": {
+    #                 "type": "object",
+    #                 "properties": {
+    #                     "music_recommendation": {
+    #                         "type": "string",
+    #                         "description": "music recommendations",
+    #                     }
+    #                 },
+    #                 "required": ["music_recommendation"],
+    #             },
+    #         },
+    #     }
+    # ]
+
+    api_key = get_api_key()
+
+    # Create an OpenAI client.
+    client = OpenAI(api_key=api_key)
+
+    prompt = caption
+    prompt += """Using these as the context, recommend me 12 musics.
+            Try providing results from various domains, movie osts, K-pop ... etc. Be creative.
+            Your answer should only include title, singer, genre like
+            "Running Up That Hill"\tChromatics\tSynthpop/Indietronica\n"134340"\tBTS\tK-pop\n ...
+            with only \t, \n and no comma or period
+            """
+
+    # Generate a response using the OpenAI API.         
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+            {"role": "user", "content": prompt}
+            ],
+    )
+
+    content = response.choices[0].message.content
+    parsed_list = content.split('\n')
+    parsed_list = [cont.split('\t') for cont in parsed_list]
+
+    return parsed_list

@@ -2,6 +2,14 @@
 from openai import OpenAI
 import streamlit as st
 
+
+if 'playlist_generated' not in st.session_state:
+    st.session_state.playlist_generated = False
+
+if 'music_filled' not in st.session_state:
+    st.session_state.music_filled = False
+
+
 st.title('TripTunes')
 
 tab1, tab2 = st.tabs(['사용자 정보 입력',"서비스 소개 및 사용 가이드"])
@@ -17,9 +25,9 @@ with tab1:
     st.write('You Selected:', ','.join(genre))
 
     if st.button('플레이리스트 생성'):
+        st.session_state.playlist_generated = True
 
-        if 'button_clicked' not in st.session_state:
-            st.session_state.button_clicked = False
+    if st.session_state.playlist_generated:
     
         st.title('당신의 여행을 표현해주세요 ✈️')
     
@@ -41,6 +49,9 @@ with tab1:
             st.subheader('당신의 취향에 맞는 노래들로 채워보세요.')
         
         if st.button('음악 채우기'):
+            st.session_state.music_filled = True
+        
+        if st.session_state.music_filled:
             st.success('음악이 당신의 플레이리스트에 채워졌습니다!')
 
 with tab2:

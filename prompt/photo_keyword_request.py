@@ -70,7 +70,7 @@ def get_image_caption(image_path):
     return response.json()['choices'][0]['message']['content']
     #print(response.json())
 
-def get_recommendation(caption):
+def get_recommendation(caption, description, img_meta_data):
     # tools = [
     #     {
     #         "type": "function",
@@ -96,7 +96,10 @@ def get_recommendation(caption):
     # Create an OpenAI client.
     client = OpenAI(api_key=api_key)
 
-    prompt = caption
+    prompt = "Keywords : " + caption + "\n"
+    prompt += "Description : " + description + "\n"
+    prompt += "Location : " + str(img_meta_data[0]) + "\n"
+    prompt += "Date Time : " + str(img_meta_data[1]) + "\n"
     prompt += """Using these as the context, recommend me 12 musics.
             Try providing results from various domains, movie osts, K-pop ... etc. Be creative.
             Your answer should only include title, singer, genre like
@@ -126,5 +129,8 @@ def get_recommendation(caption):
     content = response.choices[0].message.content
     parsed_list = content.split('\n')
     parsed_list = [cont.split('\t') for cont in parsed_list]
+
+    if len(parsed_list) < 1 or len(parsed_list[0]) < 3:
+        return get_recommendation(caption, description, img_meta_data)
 
     return parsed_list

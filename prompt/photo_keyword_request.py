@@ -108,6 +108,17 @@ def get_recommendation(caption):
     response = client.chat.completions.create(
         model="gpt-4o",
         messages=[
+            {
+                "role": "system",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": f"""Here are the user's personal information. Preferred Genre: {genre}, Gender: {gender}, Age: {age}, MBTI: {personality}
+                                    Use the information to enhance the recommendation. Still, the decision of whether to use those or not is completely up to you.
+                                """
+                    }
+                ]
+            },
             {"role": "user", "content": prompt}
             ],
     )

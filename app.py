@@ -8,7 +8,6 @@ import streamlit as st
 import datetime
 import os
 import tempfile
-import pandas as pd
 
 # load .env
 load_dotenv()
@@ -95,91 +94,40 @@ with tab1:
         image = st.file_uploader("사진 첨부", type = ['png','jpeg','jpg'])
         description = st.text_input("사진에 대한 설명을 넣어주세요.")
         
-        if True: #image is not None :
-            #st.image(image)
-#
-            #loc, dtime = get_image_metadata(image) # prompt 연결 필요
-#
-            ## Save Image Temporarily
-            #temp_dir = tempfile.mkdtemp()
-            #img_path = os.path.join(temp_dir, image.name)
-            #with open(img_path, "wb") as f:
-            #        f.write(image.getvalue())
-#
-            #caption = pkr.get_image_caption(img_path)
-#
-            #print(caption)
-#
-            #recommendation = pkr.get_recommendation(caption)
-#
-            #print(recommendation)
+        if image is not None :
+            st.image(image)
 
-            recomm = [['"Bubble Pop"', '', 'Hyuna', '', 'K-pop'], ['"Electric Feel"', '', 'MGMT  ', '', 'Psychedelic Rock'], ['"Dog Days Are Over"', '', 'Florence + The Machine', '', 'Indie Rock'], ['"Go!"', '', 'The Chemical Brothers (feat. Q-Tip)', '', 'Electronic Dance Music'], ['"Happy"', '', 'Pharrell Williams', '', 'Pop'], ['"Daft Punk Is Playing At My House"', '', 'LCD Soundsystem', '', 'Dance Punk'], ['"Shake It Off"', '', 'Taylor Swift', '', 'Pop'], ['"Experiment On Me"', '', 'Halsey', '', 'Alternative/Indie'], ['"Blue Monday"', '', 'New Order', '', 'Synthpop'], ['"Viva La Vida"', '', 'Coldplay', '', 'Alternative Rock'], ['"I Got A Boy"', '', "Girls' Generation", '', 'K-pop'], ['"Do It"', '', 'Chloe x Halle', '', 'R&B/Soul']]
+            loc, dtime = get_image_metadata(image) # prompt 연결 필요
 
-            rec_v2 = [['"Dynamite"', 'BTS', 'K-pop'], ['"Blinding Lights"', 'The Weeknd', 'Synthwave/Pop'], ['"Watermelon Sugar"', 'Harry Styles', 'Pop'], ['"Electric Feel"', 'MGMT', 'Indietronica/Psychedelic pop'], ['"Little Dark Age"', 'MGMT', 'Synthpop/Indietronica'], ['"Stay"', 'The Kid LAROI & Justin Bieber', 'Pop'], ['"Slide"', 'Calvin Harris ft. Frank Ocean & Migos', 'Electropop'], ['"On Our Way"', 'The Royal Concept', 'Indie Rock/Indietronica'], ['"You Can Call Me Al"', 'Paul Simon', 'Worldbeat/Pop Rock'], ['"Deja Vu"', 'Olivia Rodrigo', 'Pop/Rock'], ['"A Boy Is a Gun"', 'Tyler, the Creator', 'Alternative Hip-Hop'], ['"Phantom Pt. II"', 'Justice', 'Electro House']]
+            # Save Image Temporarily
+            temp_dir = tempfile.mkdtemp()
+            img_path = os.path.join(temp_dir, image.name)
+            with open(img_path, "wb") as f:
+                    f.write(image.getvalue())
 
-            col1, col2 = st.columns(2)
-            
-            style = """
-            <style>
-            .title {
-                font-size:25px !important;
-            }
-            .subheader{
-                font-size:15px !important;
-            }
-            </style>
-            """
-            playlist1_title = """
-            <p class="title">Your Playlist</p>
-            """
-            playlist2_title = """
-            <p class="title">Recommendation</p>
-            """
-            playlist1_subheader = """
-            <p class="subheader">이 세상 하나뿐인 플레이리스트와 함께 여행해보세요 🎶</p>
-            """
-            playlist2_subheader = """
-            <p class="subheader">당신의 취향에 맞는 노래들로 채워보세요.</p>
-            """
+            caption = pkr.get_image_caption(img_path)
 
+            print(caption)
 
-            #st.markdown(html_code, unsafe_allow_html=True)
+            recommendation = pkr.get_recommendation(caption)
+
+            print(recommendation)
+
+            col1, col2 = st.columns([1,1])
 
             with col1:
-                st.markdown(playlist2_title, unsafe_allow_html=True)
-                st.markdown(playlist2_subheader, unsafe_allow_html=True)
-                recommend = rec_v2
-                df = pd.DataFrame(
-                    [
-                        {"Select": False, "Title": music[0], "Artist": music[1], "Genre": music[2]} for music in recommend
-                    ]
-                )
-                editable_df = st.data_editor(
-                    df,
-                    disabled=["Title", "Artist", "Genre"],
-                    hide_index=True
-                )
-                selected_music = editable_df[editable_df["Select"] == True]
-                
-            with col2:
-                st.markdown(style+playlist1_title, unsafe_allow_html=True)
-                st.markdown(style+playlist1_subheader, unsafe_allow_html=True)
-                st.dataframe(selected_music.drop(columns=["Select"]), hide_index=True, width=700)
-                # Display the selected music
-                #st.write("Selected Music:")
-                #st.write(selected_music)
-                #st.title('당신만의 플레이리스트')
-                #st.subheader('이 세상 하나뿐인 플레이리스트와 함께 여행해보세요 🎶')
-                
+                st.title('당신만의 플레이리스트')
+                st.subheader('이 세상 하나뿐인 플레이리스트와 함께 여행해보세요 🎶')
 
-            #if st.button('음악 채우기'):
-            #    st.session_state.music_filled = True
+            with col2:
+                st.title('당신을 위해 추천된 플레이리스트')
+                st.subheader('당신의 취향에 맞는 노래들로 채워보세요.')
+            
+            if st.button('음악 채우기'):
+                st.session_state.music_filled = True
             
             if st.session_state.music_filled:
                 st.success('음악이 당신의 플레이리스트에 채워졌습니다!')
-
-            
 
 with tab2:
     st.title('TripTunes')

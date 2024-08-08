@@ -74,14 +74,16 @@ with tab1:
 
                 caption = pkr.get_image_caption(img_path)
 
-                print(caption)
+                print("Caption : ", caption)
 
                 loc, dtime = get_image_metadata(img_path)
                 img_meta_data = (loc, dtime)
-                
-                st.session_state.recommendation = pkr.get_recommendation(caption, description, img_meta_data)
 
-                print(st.session_state.recommendation)
+                user_data = {'gender': gender, 'age': age, 'character': character, 'genre': genre}
+                
+                st.session_state.recommendation = pkr.get_recommendation(caption, description, img_meta_data, user_data)
+
+                print("Recommendations : ", st.session_state.recommendation)
 
             recomm = [['"Bubble Pop"', '', 'Hyuna', '', 'K-pop'], ['"Electric Feel"', '', 'MGMT  ', '', 'Psychedelic Rock'], ['"Dog Days Are Over"', '', 'Florence + The Machine', '', 'Indie Rock'], ['"Go!"', '', 'The Chemical Brothers (feat. Q-Tip)', '', 'Electronic Dance Music'], ['"Happy"', '', 'Pharrell Williams', '', 'Pop'], ['"Daft Punk Is Playing At My House"', '', 'LCD Soundsystem', '', 'Dance Punk'], ['"Shake It Off"', '', 'Taylor Swift', '', 'Pop'], ['"Experiment On Me"', '', 'Halsey', '', 'Alternative/Indie'], ['"Blue Monday"', '', 'New Order', '', 'Synthpop'], ['"Viva La Vida"', '', 'Coldplay', '', 'Alternative Rock'], ['"I Got A Boy"', '', "Girls' Generation", '', 'K-pop'], ['"Do It"', '', 'Chloe x Halle', '', 'R&B/Soul']]
 

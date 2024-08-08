@@ -70,7 +70,7 @@ def get_image_caption(image_path):
     return response.json()['choices'][0]['message']['content']
     #print(response.json())
 
-def get_recommendation(caption, description, img_meta_data):
+def get_recommendation(caption, description, img_meta_data, user_data):
     # tools = [
     #     {
     #         "type": "function",
@@ -116,7 +116,7 @@ def get_recommendation(caption, description, img_meta_data):
                 "content": [
                     {
                         "type": "text",
-                        "text": f"""Here are the user's personal information. Preferred Genre: {genre}, Gender: {gender}, Age: {age}, MBTI: {personality}
+                        "text": f"""Here are the user's personal information. Preferred Genre: {user_data['genre']}, Gender: {user_data['gender']}, Age: {user_data['age']}, MBTI: {user_data['character']}
                                     Use the information to enhance the recommendation. Still, the decision of whether to use those or not is completely up to you.
                                 """
                     }
@@ -131,6 +131,6 @@ def get_recommendation(caption, description, img_meta_data):
     parsed_list = [cont.split('\t') for cont in parsed_list]
 
     if len(parsed_list) < 1 or len(parsed_list[0]) < 3:
-        return get_recommendation(caption, description, img_meta_data)
+        return get_recommendation(caption, description, img_meta_data, user_data)
 
     return parsed_list

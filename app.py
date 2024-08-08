@@ -80,7 +80,8 @@ if 'prev_image' not in st.session_state:
 if 'prev_description' not in st.session_state:
     st.session_state.prev_description = ""
 
-st.title('TripTunes')
+
+st.image('https://bcassetcdn.com/social/vm77minaoy/preview.png', width = 200)
 
 tab1, tab2 = st.tabs(['사용자 정보 입력',"서비스 소개 및 사용 가이드"])
 
@@ -205,7 +206,7 @@ with tab1:
 
 with tab2:
     st.title('TripTunes')
-    st.image('https://dynamic.design.com/preview/logodraft/6ee31420-5ed6-412e-87b0-d1e4d35bcce2/image/large.png', width=300)
+    
     st.write('저희의 새로운 서비스 Triptunes는 여러분들의 여행을 더 풍요롭게 만들 음악 플레이리스트를 제공합니다.Triptunes와 함께 여행을 떠나보세요.')
 
     st.title('서비스 이용 가이드')

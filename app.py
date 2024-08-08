@@ -65,7 +65,7 @@ with tab1:
 
             if image != st.session_state.prev_image or description != st.session_state.prev_description:
                 st.session_state.prev_image = image
-
+                st.session_state.prev_description = description
                 # Save Image Temporarily
                 temp_dir = tempfile.mkdtemp()
                 img_path = os.path.join(temp_dir, image.name)

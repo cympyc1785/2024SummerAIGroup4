@@ -47,46 +47,48 @@ with tab1:
             st.image(image)
 
             # Save Image Temporarily
-            temp_dir = tempfile.mkdtemp()
-            img_path = os.path.join(temp_dir, image.name)
-            with open(img_path, "wb") as f:
-                    f.write(image.getvalue())
+            if not st.session_state.playlist_generated:
+                temp_dir = tempfile.mkdtemp()
+                img_path = os.path.join(temp_dir, image.name)
+                with open(img_path, "wb") as f:
+                        f.write(image.getvalue())
 
-            caption = pkr.get_image_caption(img_path)
+                caption = pkr.get_image_caption(img_path)
 
-            print(caption)
+                print(caption)
+                
+                st.session_state.recommendation = pkr.get_recommendation(caption, description)
 
-            recommendation = pkr.get_recommendation(caption, description)
+                print(st.session_state.recommendation)
 
-            print(recommendation)
+            # col1, col2 = st.columns([1,1])
 
-            col1, col2 = st.columns([1,1])
+            # with col1:
+            #     st.title('당신만의 플레이리스트')
+            #     st.subheader('이 세상 하나뿐인 플레이리스트와 함께 여행해보세요 🎶')
 
-            with col1:
-                st.title('당신만의 플레이리스트')
-                st.subheader('이 세상 하나뿐인 플레이리스트와 함께 여행해보세요 🎶')
-
-            with col2:
+            # with col2:
+            if "recommendation" not in st.session_state:
                 st.title('당신을 위해 추천된 플레이리스트')
 
                 df = pd.DataFrame(
                     {
-                        # "add": [False for _ in range(len(recommendation))],
-                        "title": [rec[0] for rec in recommendation],
-                        "singer": [rec[1] for rec in recommendation],
-                        "genre": [rec[2] for rec in recommendation],
-                        "url": ["https://open.spotify.com/search/" + rec[0].strip("\"") for rec in recommendation],
+                        "add": [False for _ in range(len(st.session_state.recommendation))],
+                        "title": [rec[0] for rec in st.session_state.recommendation],
+                        "singer": [rec[1] for rec in st.session_state.recommendation],
+                        "genre": [rec[2] for rec in st.session_state.recommendation],
+                        "url": ["https://open.spotify.com/search/" + rec[0].strip("\"") for rec in st.session_state.recommendation],
                     }
                 )
-                # data_editor
-                st.dataframe(
+                # dataframe
+                edited_df = st.data_editor(
                     df,
                     column_config={
-                        # "add": st.column_config.CheckboxColumn(
-                        #     "Add to Playlist",
-                        #     help="Select to add to your playlist",
-                        #     default=False
-                        # ),
+                        "add": st.column_config.CheckboxColumn(
+                            "Add",
+                            help="Select to add to your playlist",
+                            default=False
+                        ),
                         "title": "Music Title",
                         "singer": "By",
                         "genre": "Genre",
@@ -95,15 +97,17 @@ with tab1:
                     hide_index=True,
                 )
 
-                # for i in range(len(recommendation)):
-                #     st.link_button(recommendation[i][0], use_container_width=True, url="https://open.spotify.com/search/" + recommendation[i][0].strip())
-                st.subheader('당신의 취향에 맞는 노래들로 채워보세요.')
-            
-            if st.button('음악 채우기'):
-                st.session_state.music_filled = True
-            
-            if st.session_state.music_filled:
-                st.success('음악이 당신의 플레이리스트에 채워졌습니다!')
+                print(edited_df)
+
+            # for i in range(len(recommendation)):
+            #     st.link_button(recommendation[i][0], use_container_width=True, url="https://open.spotify.com/search/" + recommendation[i][0].strip())
+            # st.subheader('당신의 취향에 맞는 노래들로 채워보세요.')
+        
+        # if st.button('음악 채우기'):
+        #     st.session_state.music_filled = True
+        
+        # if st.session_state.music_filled:
+        #     st.success('음악이 당신의 플레이리스트에 채워졌습니다!')
 
 with tab2:
     st.title('TripTunes')

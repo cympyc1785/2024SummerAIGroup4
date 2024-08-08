@@ -117,4 +117,7 @@ def get_recommendation(caption, description):
     parsed_list = content.split('\n')
     parsed_list = [cont.split('\t') for cont in parsed_list]
 
+    if len(parsed_list) < 1 or len(parsed_list[0]) < 3:
+        return get_recommendation(caption, description)
+
     return parsed_list

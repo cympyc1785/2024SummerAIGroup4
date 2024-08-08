@@ -83,15 +83,34 @@ with tab1:
 
                 print(st.session_state.recommendation)
 
-            loc, dtime = get_image_metadata(image) # prompt 연결 필요
+            recomm = [['"Bubble Pop"', '', 'Hyuna', '', 'K-pop'], ['"Electric Feel"', '', 'MGMT  ', '', 'Psychedelic Rock'], ['"Dog Days Are Over"', '', 'Florence + The Machine', '', 'Indie Rock'], ['"Go!"', '', 'The Chemical Brothers (feat. Q-Tip)', '', 'Electronic Dance Music'], ['"Happy"', '', 'Pharrell Williams', '', 'Pop'], ['"Daft Punk Is Playing At My House"', '', 'LCD Soundsystem', '', 'Dance Punk'], ['"Shake It Off"', '', 'Taylor Swift', '', 'Pop'], ['"Experiment On Me"', '', 'Halsey', '', 'Alternative/Indie'], ['"Blue Monday"', '', 'New Order', '', 'Synthpop'], ['"Viva La Vida"', '', 'Coldplay', '', 'Alternative Rock'], ['"I Got A Boy"', '', "Girls' Generation", '', 'K-pop'], ['"Do It"', '', 'Chloe x Halle', '', 'R&B/Soul']]
 
-            # Save Image Temporarily
-            temp_dir = tempfile.mkdtemp()
-            img_path = os.path.join(temp_dir, image.name)
-            with open(img_path, "wb") as f:
-                    f.write(image.getvalue())
+            rec_v2 = [['"Dynamite"', 'BTS', 'K-pop'], ['"Blinding Lights"', 'The Weeknd', 'Synthwave/Pop'], ['"Watermelon Sugar"', 'Harry Styles', 'Pop'], ['"Electric Feel"', 'MGMT', 'Indietronica/Psychedelic pop'], ['"Little Dark Age"', 'MGMT', 'Synthpop/Indietronica'], ['"Stay"', 'The Kid LAROI & Justin Bieber', 'Pop'], ['"Slide"', 'Calvin Harris ft. Frank Ocean & Migos', 'Electropop'], ['"On Our Way"', 'The Royal Concept', 'Indie Rock/Indietronica'], ['"You Can Call Me Al"', 'Paul Simon', 'Worldbeat/Pop Rock'], ['"Deja Vu"', 'Olivia Rodrigo', 'Pop/Rock'], ['"A Boy Is a Gun"', 'Tyler, the Creator', 'Alternative Hip-Hop'], ['"Phantom Pt. II"', 'Justice', 'Electro House']]
 
-            caption = pkr.get_image_caption(img_path)
+            col1, col2 = st.columns(2)
+            
+            style = """
+            <style>
+            .title {
+                font-size:25px !important;
+            }
+            .subheader{
+                font-size:15px !important;
+            }
+            </style>
+            """
+            playlist1_title = """
+            <p class="title">Your Playlist</p>
+            """
+            playlist2_title = """
+            <p class="title">Recommendation</p>
+            """
+            playlist1_subheader = """
+            <p class="subheader">이 세상 하나뿐인 플레이리스트와 함께 여행해보세요 🎶</p>
+            """
+            playlist2_subheader = """
+            <p class="subheader">당신의 취향에 맞는 노래들로 채워보세요.</p>
+            """
 
             #st.markdown(html_code, unsafe_allow_html=True)
 
@@ -136,12 +155,8 @@ with tab1:
                 #st.subheader('이 세상 하나뿐인 플레이리스트와 함께 여행해보세요 🎶')
                 
 
-            with col2:
-                st.title('당신을 위해 추천된 플레이리스트')
-                st.subheader('당신의 취향에 맞는 노래들로 채워보세요.')
-            
-            if st.button('음악 채우기'):
-                st.session_state.music_filled = True
+            #if st.button('음악 채우기'):
+            #    st.session_state.music_filled = True
             
             if st.session_state.music_filled:
                 st.success('음악이 당신의 플레이리스트에 채워졌습니다!')

@@ -15,7 +15,8 @@ def goto_link(site_url):
     webbrowser.open(site_url)
 # Load .env
 load_dotenv()
-API_KEY = os.environ.get('API_KEY')
+# API_KEY = os.environ.get('API_KEY')
+API_KEY = st.secrets['API_KEY']
 # Initial Setup
 geolocator = Nominatim(user_agent='geoapigroup4')
 if 'playlist_generated' not in st.session_state:

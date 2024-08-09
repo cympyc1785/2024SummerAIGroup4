@@ -6,10 +6,12 @@ from pathlib import Path
 from PIL import Image
 from io import BytesIO
 from openai import OpenAI
+import streamlit as st
 def get_api_key():
     env_path = '.env'
     load_dotenv(dotenv_path=env_path)
-    api_key = os.environ.get('API_KEY')
+    # api_key = os.environ.get('API_KEY')
+    api_key = st.secrets['API_KEY']
     return api_key
 def encode_image(image_path):
     with Image.open(image_path) as image_file:

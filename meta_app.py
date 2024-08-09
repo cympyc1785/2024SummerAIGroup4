@@ -20,7 +20,7 @@ def get_image_metadata(image_path):
         # 메타데이터 존재여부 (휴대폰 설정에 따라 다른듯요)
         if info is None:
             print(f"No EXIF metadata found in {image_path}")
-            return None, None, None 
+            return None, None 
         
         lat = None
         lon = None

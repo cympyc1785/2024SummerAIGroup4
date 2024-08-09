@@ -116,6 +116,11 @@ def get_recommendation(caption, description, img_meta_data, user_data):
     content = response.choices[0].message.content
     parsed_list = content.split('\n')
     parsed_list = [cont.split('\t') for cont in parsed_list]
-    if len(parsed_list) < 1 or len(parsed_list[0]) < 3:
+    if len(parsed_list) < 1:
         return get_recommendation(caption, description, img_meta_data, user_data)
+    
+    for parsed_music in parsed_list:
+        if len(parsed_music) < 3:
+            return get_recommendation(caption, description, img_meta_data, user_data)
+    
     return parsed_list

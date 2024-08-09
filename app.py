@@ -88,7 +88,7 @@ with tab1:
             <p class="title">Recommendation</p>
             """
             playlist1_subheader = """
-            <p class="subheader">이 세상 하나뿐인 플레이리스트와 함께 여행해보세요 :음표2:</p>
+            <p class="subheader">이 세상 하나뿐인 플레이리스트와 함께 여행해보세요</p>
             """
             playlist2_subheader = """
             <p class="subheader">당신의 취향에 맞는 노래들로 채워보세요.</p>

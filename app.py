@@ -51,8 +51,8 @@ with tab1:
     if st.button('플레이리스트 생성'):
         st.session_state.playlist_generated = True
     if st.session_state.playlist_generated:
-        st.title('당신의 여행을 표현해주세요 :비행기:')
-        st.write("여행 중 찍은 가장 좋아하는 사진을 올려주세요 :카메라:")
+        st.title('당신의 여행을 표현해주세요')
+        st.write("여행 중 찍은 가장 좋아하는 사진을 올려주세요")
         image = st.file_uploader("사진 첨부", type=['png', 'jpeg', 'jpg'])
         description = st.text_input("사진에 대한 설명을 넣어주세요.")
         if image is not None:
